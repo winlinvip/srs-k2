@@ -1,0 +1,10 @@
+ARG ARCH
+
+FROM ${ARCH}ossrs/ubuntu:focal AS build
+
+# https://serverfault.com/questions/949991/how-to-install-tzdata-on-a-ubuntu-docker-image
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update -y && \
+    apt-get install -y gcc g++ make autoconf automake cmake git git-lfs pkg-config nasm
+

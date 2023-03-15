@@ -1,0 +1,11 @@
+ARG ARCH
+
+FROM ${ARCH}ossrs/k2:base AS build
+
+WORKDIR /g
+
+# Build ffmpeg 5.1
+RUN git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg && \
+    cd ffmpeg && git checkout n5.1.2 && \
+    ./configure && make -j2 && make install
+

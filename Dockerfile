@@ -1,21 +1,8 @@
 ARG ARCH
 
-FROM ${ARCH}ossrs/ubuntu:focal AS build
-
-# https://serverfault.com/questions/949991/how-to-install-tzdata-on-a-ubuntu-docker-image
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update -y && \
-    apt-get install -y gcc g++ make autoconf automake cmake git git-lfs
+FROM ${ARCH}ossrs/k2:base2 AS build
 
 WORKDIR /g
-
-# Build ffmpeg 5.1
-RUN apt-get install -y pkg-config nasm
-
-RUN git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg && \
-    cd ffmpeg && git checkout n5.1.2 && \
-    ./configure && make -j2 && make install
 
 # Build sherpa-ncnn
 RUN git clone https://github.com/k2-fsa/sherpa-ncnn && \

@@ -23,7 +23,8 @@ The workflow is like this, the original picture is [here](https://www.figma.com/
 First, run in docker:
 
 ```bash
-docker run --rm -it -p 1935:1935 registry.cn-hangzhou.aliyuncs.com/ossrs/k2:1
+docker run --rm -it -p 1935:1935\
+  registry.cn-hangzhou.aliyuncs.com/ossrs/k2:1
 ```
 
 Then, publish by OBS:
@@ -60,4 +61,6 @@ docker run --rm -it -p 1935:1935 -p 1985:1985 -p 8080:8080 \
 Then open the web page:
 
 http://localhost:8080/players/rtc_publisher.html
+
+Click the button and it starts to work like magic.
 
