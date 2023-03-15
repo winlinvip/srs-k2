@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+.idea
+dev-docker
+srs-cloud
