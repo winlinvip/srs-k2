@@ -1,0 +1,38 @@
+ARG ARCH
+
+FROM ${ARCH}ossrs/k2:base2 AS build
+
+ARG TARGETARCH
+
+WORKDIR /g
+
+# Build sherpa-ncnn
+ARG TARGET_REF=1b15462
+RUN echo "Clone sherpa-ncnn at $TARGET_REF" && \
+  git clone https://github.com/k2-fsa/sherpa-ncnn && \
+  cd sherpa-ncnn && git reset --hard $TARGET_REF
+
+WORKDIR /g/sherpa-ncnn/build
+
+# To use if in RUN, see https://github.com/moby/moby/issues/7281#issuecomment-389440503
+# Note that only exists issue like "/bin/sh: 1: [[: not found" for Ubuntu20, no such problem in CentOS7.
+SHELL ["/bin/bash", "-c"]
+
+RUN if [[ $TARGETARCH == 'amd64' || $TARGETARCH == 'arm64' ]]; then \
+      cmake -DCMAKE_BUILD_TYPE=Release -DSHERPA_NCNN_ENABLE_FFMPEG_EXAMPLES=ON ..; \
+    fi
+
+RUN if [[ $TARGETARCH == 'arm' ]]; then \
+      cmake \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DSHERPA_NCNN_ENABLE_PYTHON=OFF \
+        -DSHERPA_NCNN_ENABLE_PORTAUDIO=OFF \
+        -DSHERPA_NCNN_ENABLE_JNI=OFF \
+        -DSHERPA_NCNN_ENABLE_BINARY=ON \
+        -DSHERPA_NCNN_ENABLE_TEST=OFF \
+        -DSHERPA_NCNN_ENABLE_FFMPEG_EXAMPLES=ON \
+        ..; \
+    fi
+
+RUN make -j2

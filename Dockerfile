@@ -1,15 +1,8 @@
 ARG ARCH
 
-FROM ${ARCH}ossrs/k2:base2 AS build
+FROM ${ARCH}ossrs/k2:base3 AS build
 
 WORKDIR /g
-
-# Build sherpa-ncnn
-RUN git clone https://github.com/k2-fsa/sherpa-ncnn && \
-    mkdir -p sherpa-ncnn/build && \
-    cd sherpa-ncnn/build && \
-    cmake -DCMAKE_BUILD_TYPE=Release -DSHERPA_NCNN_ENABLE_FFMPEG_EXAMPLES=ON .. && \
-    make -j2
 
 # Download models
 RUN env GIT_LFS_SKIP_SMUDGE=1 \
