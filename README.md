@@ -23,9 +23,10 @@ The workflow is like this, the original picture is [here](https://www.figma.com/
 First, run in docker:
 
 ```bash
-docker run --rm -it -p 1935:1935\
-  registry.cn-hangzhou.aliyuncs.com/ossrs/k2:1
+docker run --rm -it -p 1935:1935 -p 1985:1985 -p 8080:8080 ossrs/k2:1
 ```
+
+> Note: Please use `registry.cn-hangzhou.aliyuncs.com/ossrs/k2:1` if in China.
 
 Then, publish by OBS:
 
@@ -53,10 +54,11 @@ ifconfig en0 |grep 'inet '
 Next, start docker with IP setting:
 
 ```bash
-docker run --rm -it -p 1935:1935 -p 1985:1985 -p 8080:8080 \
-    --env CANDIDATE="192.168.6.53" -p 8000:8000/udp \
-    registry.cn-hangzhou.aliyuncs.com/ossrs/k2:1
+docker run --rm -it -p 1935:1935 -p 1985:1985 -p 8080:8080 -p 8000:8000/udp \
+    --env CANDIDATE="192.168.6.53" ossrs/k2:1
 ```
+
+> Note: Please use `registry.cn-hangzhou.aliyuncs.com/ossrs/k2:1` if in China.
 
 Then open the web page:
 
