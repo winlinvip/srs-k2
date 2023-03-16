@@ -33,14 +33,14 @@ Then, publish by OBS:
 * Server: `rtmp://localhost/live/`
 * Stream Key: `livestream`
 
-Or, publish microphone by ffmpeg:
+Or, publish microphone by ffmpeg for macOS:
 
 ```bash
 ffmpeg -f avfoundation -i ":0" -acodec aac -ab 64k -ar 44100 -ac 2 \
   -f flv rtmp://localhost/live/livestream
 ```
 
-> Note: Use `ffmpeg -f avfoundation -i ":"` to list microphones.
+> Note: Use `ffmpeg -f avfoundation -list_devices true -i ""` to list microphones.
 
 ## Usage: WebRTC
 

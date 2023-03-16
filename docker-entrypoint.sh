@@ -3,6 +3,9 @@
 # Always start SRS by default.
 (cd /usr/local/srs && ./objs/srs -c conf/srs.conf 1>objs/srs.stdout.log 2>objs/srs.stderr.log)
 
+# Always start API server by default.
+/usr/local/api/server &
+
 #  If first arg is not binary, set to default ffmpeg.
 if [[ $1 != bash && $1 != sh && $1 != sherpa-ncnn* ]]; then
   set -- sherpa-ncnn-ffmpeg "$@"

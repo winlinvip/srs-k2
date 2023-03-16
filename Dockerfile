@@ -36,6 +36,14 @@ FROM ${ARCH}ossrs/srs:5 AS srs
 # Make SRS fit.
 RUN rm -rf /usr/local/srs/objs/ffmpeg
 
+FROM ${ARCH}golang:1.18 AS api
+
+ADD api-server /g/api-server
+WORKDIR /g/api-server
+RUN go build -mod vendor . && \
+    mkdir -p /usr/local/api && \
+    mv api-server /usr/local/api/server
+
 # http://releases.ubuntu.com/focal/
 FROM ${ARCH}ubuntu:focal AS dist
 
@@ -43,6 +51,8 @@ FROM ${ARCH}ubuntu:focal AS dist
 COPY --from=srs /usr/local/srs /usr/local/srs
 # For K2.
 COPY --from=build /usr/local/k2 /usr/local/k2
+# For api-server.
+COPY --from=api /usr/local/api/server /usr/local/api/server
 
 # The startup script.
 ADD ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
@@ -79,6 +89,10 @@ ENV PATH=$PATH:/usr/local/k2/sherpa-ncnn/build/bin \
   SRS_VHOST_TCP_NODELAY=on \
   SRS_VHOST_MIN_LATENCY=on \
   SRS_VHOST_PLAY_GOP_CACHE=off \
+  # For SRS Hooks.
+  SRS_VHOST_HTTP_HOOKS_ENABLED=on \
+  SRS_VHOST_HTTP_HOOKS_ON_PUBLISH=http://localhost:8085/api/v1/streams \
+  SRS_VHOST_HTTP_HOOKS_ON_UNPUBLISH=http://localhost:8085/api/v1/streams \
   # For sherpa.
   SHERPA_NCNN_TOKENS=./models/tokens.txt \
   SHERPA_NCNN_ENCODER_PARAM=./models/encoder_jit_trace-pnnx.ncnn.param \
