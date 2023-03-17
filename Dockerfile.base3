@@ -7,7 +7,8 @@ ARG TARGETARCH
 WORKDIR /g
 
 # Build sherpa-ncnn
-ARG TARGET_REF=1b15462
+# * master                  9451b0e [origin/master] Flush stdout logging to avoid cache. (#159)
+ARG TARGET_REF=9451b0e
 RUN echo "Clone sherpa-ncnn at $TARGET_REF" && \
   git clone https://github.com/k2-fsa/sherpa-ncnn && \
   cd sherpa-ncnn && git reset --hard $TARGET_REF

@@ -93,6 +93,10 @@ ENV PATH=$PATH:/usr/local/k2/sherpa-ncnn/build/bin \
   SRS_VHOST_HTTP_HOOKS_ENABLED=on \
   SRS_VHOST_HTTP_HOOKS_ON_PUBLISH=http://localhost:8085/api/v1/streams \
   SRS_VHOST_HTTP_HOOKS_ON_UNPUBLISH=http://localhost:8085/api/v1/streams \
+  # For API server
+  API_SERVER_LISTEN=8085 \
+  API_SERVER_K2=sherpa-ncnn-ffmpeg \
+  API_SERVER_K2_DIR=/usr/local/k2/sherpa-ncnn/build/bin \
   # For sherpa.
   SHERPA_NCNN_TOKENS=./models/tokens.txt \
   SHERPA_NCNN_ENCODER_PARAM=./models/encoder_jit_trace-pnnx.ncnn.param \
@@ -109,6 +113,7 @@ ENV PATH=$PATH:/usr/local/k2/sherpa-ncnn/build/bin \
   SHERPA_NCNN_RULE2_MIN_TRAILING_SILENCE=0.8 \
   SHERPA_NCNN_RULE3_MIN_UTTERANCE_LENGTH=15 \
   SHERPA_NCNN_SIMPLE_DISLAY=on \
+  SHERPA_NCNN_DISPLAY_LABEL=Data \
   LD_LIBRARY_PATH=/usr/local/k2/lib/
 
 ENTRYPOINT ["docker-entrypoint.sh"]

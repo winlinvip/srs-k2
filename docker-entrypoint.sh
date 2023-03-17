@@ -1,15 +1,13 @@
 #!/bin/bash
 
+#  Allow user to control the entrypoint.
+if [[ $1 == bash || $1 == sh || $1 == sherpa-ncnn* ]]; then
+  exec "$@"
+  exit $?
+fi
+
 # Always start SRS by default.
 (cd /usr/local/srs && ./objs/srs -c conf/srs.conf 1>objs/srs.stdout.log 2>objs/srs.stderr.log)
-
-# Always start API server by default.
-/usr/local/api/server &
-
-#  If first arg is not binary, set to default ffmpeg.
-if [[ $1 != bash && $1 != sh && $1 != sherpa-ncnn* ]]; then
-  set -- sherpa-ncnn-ffmpeg "$@"
-fi
 
 # Run sherpa.
 echo "$@"
@@ -24,4 +22,6 @@ echo -n "SHERPA_NCNN_RULE2_MIN_TRAILING_SILENCE=$SHERPA_NCNN_RULE2_MIN_TRAILING_
 echo -n "SHERPA_NCNN_RULE3_MIN_UTTERANCE_LENGTH=$SHERPA_NCNN_RULE3_MIN_UTTERANCE_LENGTH, "
 echo "SHERPA_NCNN_SIMPLE_DISLAY=$SHERPA_NCNN_SIMPLE_DISLAY"
 
+# We use api server to start K2.
+set -- /usr/local/api/server "$@"
 exec "$@"
