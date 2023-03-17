@@ -32,7 +32,7 @@ docker run --rm -it -p 1935:1935 -p 1985:1985 -p 8080:8080 ossrs/k2:1
 
 > Note: Please use `registry.cn-hangzhou.aliyuncs.com/ossrs/k2:1` if in China.
 
-Then, publish by OBS:
+Then, [download](https://obsproject.com/) and publish by OBS:
 
 * Server: `rtmp://localhost/live/`
 * Stream Key: `livestream`
