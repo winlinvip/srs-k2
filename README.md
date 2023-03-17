@@ -46,6 +46,22 @@ ffmpeg -f avfoundation -i ":0" -acodec aac -ab 64k -ar 44100 -ac 2 \
 
 > Note: Use `ffmpeg -f avfoundation -list_devices true -i ""` to list microphones.
 
+## Usage: URL
+
+If you got a FFmpeg URL, you can set the env `SHERPA_NCNN_INPUT_URL`:
+
+```bash
+docker run --rm --env SHERPA_NCNN_INPUT_URL=url ossrs/k2:1
+```
+
+Please note that the `url` can be any URL that supported by FFmpeg, for example:
+
+* RTMP: `rtmp://192.168.1.100/live/livestream`
+* HLS: `htto://192.168.1.100:8080/live/livestream.m3u8`
+* HTTP-FLV: `htto://192.168.1.100:8080/live/livestream.flv`
+
+Or any other format supported by FFmpeg.
+
 ## Usage: WebRTC
 
 First, get your ip by `ifconfig`, for example `192.168.6.53`:
