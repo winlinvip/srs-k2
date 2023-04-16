@@ -17,8 +17,9 @@ RUN mkdir -p /usr/local/k2 && \
     mv /g/sherpa-ncnn-streaming-zipformer-bilingual-zh-en-2023-02-13 /usr/local/k2/ && \
     ln -sf /usr/local/k2/sherpa-ncnn-streaming-zipformer-bilingual-zh-en-2023-02-13 /usr/local/k2/models
 
+# Only copy the sherpa-ncnn-ffmpeg.
 RUN mkdir -p /usr/local/k2/sherpa-ncnn/build/bin/ && \
-    mv /g/sherpa-ncnn/build/bin/sherpa-ncnn* /usr/local/k2/sherpa-ncnn/build/bin/ && \
+    mv /g/sherpa-ncnn/build/bin/sherpa-ncnn-ffmpeg /usr/local/k2/sherpa-ncnn/build/bin/ && \
     strip /usr/local/k2/sherpa-ncnn/build/bin/sherpa-ncnn-ffmpeg && \
     ln -sf /usr/local/k2/sherpa-ncnn-streaming-zipformer-bilingual-zh-en-2023-02-13 /usr/local/k2/sherpa-ncnn/build/bin/models
 
@@ -55,7 +56,7 @@ COPY --from=build /usr/local/k2 /usr/local/k2
 COPY --from=api /usr/local/api/server /usr/local/api/server
 
 # The startup script.
-ADD ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+ADD ./docker-entrypoint.sh /usr/local/k2/sherpa-ncnn/build/bin/docker-entrypoint.sh
 
 # Expose ports for streaming @see https://github.com/ossrs/srs#ports
 EXPOSE 1935 1985 8080 8000/udp 10080/udp
@@ -63,6 +64,8 @@ EXPOSE 1935 1985 8080 8000/udp 10080/udp
 WORKDIR /usr/local/k2/sherpa-ncnn/build/bin
 
 ENV PATH=$PATH:/usr/local/k2/sherpa-ncnn/build/bin \
+  LD_LIBRARY_PATH=/usr/local/k2/lib/ \
+  # For SRS globals.
   SRS_LISTEN=1935 \
   SRS_SRS_LOG_TANK=file \
   SRS_DAEMON=on \
@@ -115,7 +118,6 @@ ENV PATH=$PATH:/usr/local/k2/sherpa-ncnn/build/bin \
   SHERPA_NCNN_SIMPLE_DISLAY=on \
   SHERPA_NCNN_DISPLAY_LABEL=Data \
   SHERPA_NCNN_ASD_ENDPOINTS=2 \
-  SHERPA_NCNN_ASD_SAMPLES=8 \
-  LD_LIBRARY_PATH=/usr/local/k2/lib/
+  SHERPA_NCNN_ASD_SAMPLES=8
 
 ENTRYPOINT ["docker-entrypoint.sh"]

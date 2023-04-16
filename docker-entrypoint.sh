@@ -1,13 +1,13 @@
 #!/bin/bash
 
 #  Allow user to control the entrypoint.
-if [[ $1 == bash || $1 == sh || $1 == sherpa-ncnn* ]]; then
+if [[ $1 == bash || $1 == sh ]]; then
   exec "$@"
   exit $?
 fi
 
 # Always start SRS by default.
-(cd /usr/local/srs && ./objs/srs -c conf/srs.conf 1>objs/srs.stdout.log 2>objs/srs.stderr.log)
+(cd /usr/local/srs && ./objs/srs -c conf/srs.conf 1>/dev/stderr 2>/dev/stderr)
 
 # Run sherpa.
 echo "$@"
@@ -21,6 +21,17 @@ echo -n "SHERPA_NCNN_RULE1_MIN_TRAILING_SILENCE=$SHERPA_NCNN_RULE1_MIN_TRAILING_
 echo -n "SHERPA_NCNN_RULE2_MIN_TRAILING_SILENCE=$SHERPA_NCNN_RULE2_MIN_TRAILING_SILENCE, "
 echo -n "SHERPA_NCNN_RULE3_MIN_UTTERANCE_LENGTH=$SHERPA_NCNN_RULE3_MIN_UTTERANCE_LENGTH, "
 echo "SHERPA_NCNN_SIMPLE_DISLAY=$SHERPA_NCNN_SIMPLE_DISLAY"
+
+# Tips.
+echo ""
+echo "---------------------------------------------"
+echo "You can push RTMP stream to SRS by FFmpeg:"
+echo "    rtmp://localhost/live/livestream"
+echo "Or by OBS:"
+echo "    Server:     rtmp://localhost/live"
+echo "    Stream Key: livestream"
+echo "---------------------------------------------"
+echo ""
 
 # We use api server to start K2.
 set -- /usr/local/api/server "$@"
